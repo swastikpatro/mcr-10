@@ -17,6 +17,12 @@ const initialState = {
 
 const inventoryReducer = (state, action) => {
   switch (action.type) {
+    case 'ADD_PRODUCT':
+      return {
+        ...state,
+        allProducts: [...state.allProducts, action.payload],
+      };
+
     case 'UPDATE_FILTERS_STATE':
       return {
         ...state,
@@ -98,9 +104,13 @@ const InventoryProvider = ({ children }) => {
     });
   };
 
+  const addProduct = productToAdd => {
+    dispatch({ type: 'ADD_PRODUCT', payload: productToAdd });
+  };
+
   return (
     <InventoryContext.Provider
-      value={{ ...state, updateFilter, showFilteredProducts }}
+      value={{ ...state, updateFilter, showFilteredProducts, addProduct }}
     >
       {children}
     </InventoryContext.Provider>
