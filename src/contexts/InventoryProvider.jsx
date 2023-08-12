@@ -6,8 +6,9 @@ const InventoryContext = createContext(null);
 export const useInventoryContext = () => useContext(InventoryContext);
 
 const initialState = {
-  allProducts: inventoryData,
-  filteredProducts: inventoryData,
+  allProducts: JSON.parse(localStorage.getItem('inventory')) ?? inventoryData,
+  filteredProducts:
+    JSON.parse(localStorage.getItem('inventory')) ?? inventoryData,
   filters: {
     selectDepartment: 'all',
     showStockItems: false,
@@ -18,9 +19,12 @@ const initialState = {
 const inventoryReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_PRODUCT':
+      const updatedProducts = [...state.allProducts, action.payload];
+      localStorage.setItem('inventory', JSON.stringify(updatedProducts));
+
       return {
         ...state,
-        allProducts: [...state.allProducts, action.payload],
+        allProducts: updatedProducts,
       };
 
     case 'UPDATE_FILTERS_STATE':
